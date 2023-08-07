@@ -2,116 +2,118 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
 
-<h1>Paramètres</h1>
+    <h1>Paramètres</h1>
 
-  <form method="POST" action="{{ url_for('main.settings') }}">
-    <h3>Changer le nom d'utilisateur</h3>
-    <div class="form-group">
-      <label for="new_username">Nouveau nom d'utilisateur</label>
-      <input type="text" class="form-control" id="new_username" name="new_username" required>
-    </div>
-    <button type="submit">Changer le nom d'utilisateur</button>
-  </form>
-
-  <hr>
-
-  <form method="POST" action="{{ url_for('main.settings') }}">
-    <h3>Changer le mot de passe</h3>
-    <div class="form-group">
-      <label for="current_password">Mot de passe actuel</label>
-      <input type="password" class="form-control" id="current_password" name="current_password" required>
-    </div>
-    <div class="form-group">
-      <label for="new_password">Nouveau mot de passe</label>
-      <input type="password" class="form-control" id="new_password" name="new_password" required>
-    </div>
-    <div class="form-group">
-      <label for="confirm_password">Confirmer le mot de passe</label>
-      <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-    </div>
-    <button type="submit">Changer le mot de passe</button>
-  </form>
-
-  <hr>
-
-  {% if session.get('2fa_enabled') %}
     <form method="POST" action="{{ url_for('main.settings') }}">
-      <h3>Authentification à deux facteurs (2FA)</h3>
-      <p>L'authentification à deux facteurs est activée pour votre compte.</p>
-      <div class="form-check">
-        <input value="off" type="text" style="display: none;" class="form-check-input" id="enable_2fa" name="enable_2fa">
-      </div>
-      <button type="submit" name="disable_2fa">Désactiver</button>
+        <h3>Changer le nom d'utilisateur</h3>
+        <div class="form-group">
+            <label for="new_username">Nouveau nom d'utilisateur</label>
+            <input type="text" class="form-control" id="new_username" name="new_username" required>
+        </div>
+        <button type="submit">Changer le nom d'utilisateur</button>
     </form>
-  {% else %}
+
+    <hr>
+
     <form method="POST" action="{{ url_for('main.settings') }}">
-      <h3>Authentification à deux facteurs (2FA)</h3>
-      <p>L'authentification à deux facteurs n'est pas activée pour votre compte.</p>
-      <div class="form-check">
-        <input checked="checked" style="display: none;" type="checkbox" class="form-check-input" id="enable_2fa" name="enable_2fa">
-      </div>
-      <button type="submit">Activer</button>
+        <h3>Changer le mot de passe</h3>
+        <div class="form-group">
+            <label for="current_password">Mot de passe actuel</label>
+            <input type="password" class="form-control" id="current_password" name="current_password" required>
+        </div>
+        <div class="form-group">
+            <label for="new_password">Nouveau mot de passe</label>
+            <input type="password" class="form-control" id="new_password" name="new_password" required>
+        </div>
+        <div class="form-group">
+            <label for="confirm_password">Confirmer le mot de passe</label>
+            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+        </div>
+        <button type="submit">Changer le mot de passe</button>
     </form>
-  {% endif %}
 
-  <hr>
+    <hr>
 
-  <form method="POST" action="{{ url_for('main.settings') }}">
-    <h3>Supprimer mes podcasts</h3>
-    <button type="submit" name="delete_podcasts">Supprimer mes podcast</button>
-  </form>
+    {% if session.get('2fa_enabled') %}
+        <form method="POST" action="{{ url_for('main.settings') }}">
+            <h3>Authentification à deux facteurs (2FA)</h3>
+            <p>L'authentification à deux facteurs est activée pour votre compte.</p>
+            <div class="form-check">
+                <input value="off" type="text" style="display: none;" class="form-check-input" id="enable_2fa"
+                       name="enable_2fa">
+            </div>
+            <button type="submit" name="disable_2fa">Désactiver</button>
+        </form>
+    {% else %}
+        <form method="POST" action="{{ url_for('main.settings') }}">
+            <h3>Authentification à deux facteurs (2FA)</h3>
+            <p>L'authentification à deux facteurs n'est pas activée pour votre compte.</p>
+            <div class="form-check">
+                <input checked="checked" style="display: none;" type="checkbox" class="form-check-input" id="enable_2fa"
+                       name="enable_2fa">
+            </div>
+            <button type="submit">Activer</button>
+        </form>
+    {% endif %}
 
-  <hr>
+    <hr>
 
-  <form method="POST" action="{{ url_for('main.settings') }}">
-    <h3>Supprimer le compte</h3>
-    <button type="submit" name="delete_account">Supprimer le compte</button>
-  </form>
-
-  <hr>
-
-  <div class="opml">
-    <h3>Importer / Exporter des podcasts</h3>
-    <form method="POST" action="{{ url_for('main.import_opml') }}" enctype="multipart/form-data">
-      <input type="file" id="fileInput" name="file" accept=".opml, .xml" style="display: none;">
-      <button type="button" onclick="chooseFile()">Importer des podcasts (opml)</button>
-      <button type="button" onclick="export_opml()">Exporter mes podcasts (opml)</button>
-      <p id="importMessage" style="display: none;"></p>
+    <form method="POST" action="{{ url_for('main.settings') }}">
+        <h3>Supprimer mes podcasts</h3>
+        <button type="submit" name="delete_podcasts">Supprimer mes podcast</button>
     </form>
-  </div>
-  
-  <script>
-    function chooseFile() {
-      document.getElementById('fileInput').click();
-    }
-  
-    function import_opml() {
-      var fileInput = document.getElementById('fileInput');
-      var file = fileInput.files[0];
-      var formData = new FormData();
-      formData.append('file', file);
-  
-      var request = new XMLHttpRequest();
-      request.open('POST', '/import');
-      request.onload = function () {
-        if (request.status === 200) {
-          document.getElementById('importMessage').textContent = 'Les podcasts ont été importés.';
-          window.location.replace('{{ url_for('main.podcasts') }}');
-        } else {
-          document.getElementById('importMessage').textContent = 'Une erreur s\'est produite lors de l\'importation.';
+
+    <hr>
+
+    <form method="POST" action="{{ url_for('main.settings') }}">
+        <h3>Supprimer le compte</h3>
+        <button type="submit" name="delete_account">Supprimer le compte</button>
+    </form>
+
+    <hr>
+
+    <div class="opml">
+        <h3>Importer / Exporter des podcasts</h3>
+        <form method="POST" action="{{ url_for('main.import_opml') }}" enctype="multipart/form-data">
+            <input type="file" id="fileInput" name="file" accept=".opml, .xml" style="display: none;">
+            <button type="button" onclick="chooseFile()">Importer des podcasts (opml)</button>
+            <button type="button" onclick="export_opml()">Exporter mes podcasts (opml)</button>
+            <p id="importMessage" style="display: none;"></p>
+        </form>
+    </div>
+
+    <script>
+        function chooseFile() {
+            document.getElementById('fileInput').click();
         }
-        document.getElementById('importMessage').style.display = 'block';
-      };
-      request.send(formData);
-    }
-  
-    function export_opml() {
-      window.location.replace('/export');
-    }
-  
-    document.getElementById('fileInput').addEventListener('change', import_opml);
-  </script>  
+
+        function import_opml() {
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            var formData = new FormData();
+            formData.append('file', file);
+
+            var request = new XMLHttpRequest();
+            request.open('POST', '/import');
+            request.onload = function () {
+                if (request.status === 200) {
+                    document.getElementById('importMessage').textContent = 'Les podcasts ont été importés.';
+                    window.location.replace('{{ url_for('main.podcasts') }}');
+                } else {
+                    document.getElementById('importMessage').textContent = 'Une erreur s\'est produite lors de l\'importation.';
+                }
+                document.getElementById('importMessage').style.display = 'block';
+            };
+            request.send(formData);
+        }
+
+        function export_opml() {
+            window.location.replace('/export');
+        }
+
+        document.getElementById('fileInput').addEventListener('change', import_opml);
+    </script>
 
 {% endblock %}

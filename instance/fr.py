@@ -4,6 +4,7 @@ import json
 import sqlite3
 import time
 
+
 # Function to retrieve RSS feed and genres from iTunes API
 def getrss(url):
     feed_url = ''
@@ -43,6 +44,7 @@ def getrss(url):
 
     rss_feed = feed_url
     return rss_feed, genres, podID
+
 
 # Connect to the SQLite database
 conn = sqlite3.connect("instance/site.db")
@@ -97,15 +99,18 @@ if "feed" in data and "entry" in data["feed"]:
 
                     if existing_podcast:
                         # Update the existing podcast details
-                        cursor.execute("UPDATE discover SET title = ?, keywords = ?, image = ?, description = ?, author = ?, apple_podcast_id = ?, language = ? WHERE rss_feed = ?", (name, genres, image_url, summary, rss_feed, author, podID, language))
+                        cursor.execute(
+                            "UPDATE discover SET title = ?, keywords = ?, image = ?, description = ?, author = ?, apple_podcast_id = ?, language = ? WHERE rss_feed = ?",
+                            (name, genres, image_url, summary, rss_feed, author, podID, language))
                         conn.commit()
                         # print('Podcast', name, 'mis à jour avec succès.')
                     else:
                         # Insert the new podcast into the database
-                        cursor.execute("INSERT INTO discover (title, description, author, rss_feed, image, keywords, apple_podcast_id, language) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (name, summary, author, rss_feed, image_url, genres, podID, language))
+                        cursor.execute(
+                            "INSERT INTO discover (title, description, author, rss_feed, image, keywords, apple_podcast_id, language) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                            (name, summary, author, rss_feed, image_url, genres, podID, language))
                         conn.commit()
                         # print('Podcast', name, 'ajouté avec succès.')
-
 
                     # Sleep for a short duration to avoid overwhelming the server
                     time.sleep(0.1)
@@ -142,7 +147,9 @@ for missing_podcast_id in missing_podcast_ids:
             # For example, you can update the podcast details using an API request or other data sources
 
             # Update the podcast details in the database
-            cursor.execute("UPDATE discover SET title = ?, keywords = ?, image = ?, description = ?, author = ? WHERE apple_podcast_id = ?", (name, genres, image_url, summary, author, missing_podcast_id))
+            cursor.execute(
+                "UPDATE discover SET title = ?, keywords = ?, image = ?, description = ?, author = ? WHERE apple_podcast_id = ?",
+                (name, genres, image_url, summary, author, missing_podcast_id))
             conn.commit()
             # print('Podcast', name, 'updated successfully.')
 

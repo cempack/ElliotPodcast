@@ -4,9 +4,9 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/verify_2fa.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/verify_2fa.css') }}">
 
-<h1>Vérification du code OTP</h1>
+    <h1>Vérification du code OTP</h1>
     <p>Veuillez entrer le code OTP généré par votre application d'authentification.</p>
     <form method="post" action="{{ url_for('main.verify_2fa') }}">
         <div>

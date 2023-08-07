@@ -4,46 +4,46 @@
 
 {% block content %}
 
-<style>
-/* Global Styles */
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
+    <style>
+        /* Global Styles */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-/* Heading */
-h1 {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  color: #18B777;
-}
+        /* Heading */
+        h1 {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: #18B777;
+        }
 
-h2 {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  color: #ffffff;
-}
+        h2 {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
 
-/* Links */
-.content > a {
-  color: #21f3b1;
-  text-decoration: none;
-  transition: color 0.15s ease-in-out;
-}
+        /* Links */
+        .content > a {
+            color: #21f3b1;
+            text-decoration: none;
+            transition: color 0.15s ease-in-out;
+        }
 
-.content > a:hover {
-  color: #17c48e;
-}
-</style>
+        .content > a:hover {
+            color: #17c48e;
+        }
+    </style>
 
     <h1>Bienvenue sur Steraudio</h1>
     <div class="content">
-    {% if current_user.is_authenticated %}
-        <h2>Bonjour, {{ current_user.username }}!</h2>
-    {% else %}
-        <a href="{{ url_for('main.login') }}">Se connecter</a> ou
-        <a href="{{ url_for('main.register') }}">Créer un compte</a>
-    {% endif %}
+        {% if current_user.is_authenticated %}
+            <h2>Bonjour, {{ current_user.username }}!</h2>
+        {% else %}
+            <a href="{{ url_for('main.login') }}">Se connecter</a> ou
+            <a href="{{ url_for('main.register') }}">Créer un compte</a>
+        {% endif %}
     </div>
 {% endblock %}

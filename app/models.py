@@ -4,9 +4,11 @@ from flask_login import UserMixin
 from app import db, login_manager
 import re
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -14,8 +16,10 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(60), nullable=False)
     otp_secret = db.Column(db.String(16), nullable=True)
     is_2fa_enabled = db.Column(db.Boolean, default=False)
-    subscriptions = db.relationship('Podcast', secondary='user_podcast', backref=db.backref('subscribers', lazy=True), lazy=True)
-    podcasts = db.relationship('Podcast', secondary='user_podcast', back_populates='owners', lazy=True, overlaps="subscribers,subscriptions")
+    subscriptions = db.relationship('Podcast', secondary='user_podcast', backref=db.backref('subscribers', lazy=True),
+                                    lazy=True)
+    podcasts = db.relationship('Podcast', secondary='user_podcast', back_populates='owners', lazy=True,
+                               overlaps="subscribers,subscriptions")
 
 
 class UserPodcast(db.Model):
@@ -36,7 +40,8 @@ class Podcast(db.Model):
     owner = db.Column(db.String(100), nullable=True)
     explicit = db.Column(db.Boolean, nullable=False)
     language = db.Column(db.String(50), nullable=True)
-    owners = db.relationship('User', secondary='user_podcast', back_populates='podcasts', lazy=True, overlaps="subscribers,subscriptions")
+    owners = db.relationship('User', secondary='user_podcast', back_populates='podcasts', lazy=True,
+                             overlaps="subscribers,subscriptions")
 
     @property
     def episodes(self):

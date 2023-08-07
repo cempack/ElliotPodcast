@@ -1,36 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="podcast_infos">
-  <img id="podcastImage" src="{{ podcast.image }}">
-  <div>
-    <h2 id="title">{{ podcast.title }}</h2>
-    <!-- <p>RSS Feed: {{ podcast.rss_feed }}</p> -->
-    <p>Mots clés: {{ podcast.keywords }}...</p>
-    <p>Auteur: {{ podcast.author }}</p>
-  </div>
-</div>
-<hr>
-<!-- <h3>Episodes : </h3> -->
-<div id="episodes"></div>
+    <div class="podcast_infos">
+        <img id="podcastImage" src="{{ podcast.image }}">
+        <div>
+            <h2 id="title">{{ podcast.title }}</h2>
+            <!-- <p>RSS Feed: {{ podcast.rss_feed }}</p> -->
+            <p>Mots clés: {{ podcast.keywords }}...</p>
+            <p>Auteur: {{ podcast.author }}</p>
+        </div>
+    </div>
+    <hr>
+    <!-- <h3>Episodes : </h3> -->
+    <div id="episodes"></div>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/podcast.css') }}">
-<style>
-  #audioPlayerContainer {
-    background-image: url('{{ podcast.image }}');
-  }
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/podcast.css') }}">
+    <style>
+        #audioPlayerContainer {
+            background-image: url('{{ podcast.image }}');
+        }
 
-  #audioPlayerContainer::before {
-    background-image: url('{{ podcast.image }}');
-  }
-</style>
+        #audioPlayerContainer::before {
+            background-image: url('{{ podcast.image }}');
+        }
+    </style>
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript">
-  const fetch_url = '{{ url_for('main.api_episodes', podcast_id=podcast.id) }}';
-  const image_url = '{{ podcast.image }}';
-  const author = '{{ podcast.author }}';
-</script>
-<script src="{{ url_for('static', filename='js/podcast.js') }}"></script>
+    <script type="text/javascript">
+        const fetch_url = '{{ url_for('main.api_episodes', podcast_id=podcast.id) }}';
+        const image_url = '{{ podcast.image }}';
+        const author = '{{ podcast.author }}';
+    </script>
+    <script src="{{ url_for('static', filename='js/podcast.js') }}"></script>
 {% endblock %}

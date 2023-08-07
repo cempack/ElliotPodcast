@@ -9,6 +9,7 @@ db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
 
+
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = '613ca18acf1a6f84ece6bdd5a19980feafe8754a3a49f278395931bbea30062a'
@@ -23,7 +24,7 @@ def create_app():
 
     # Enable cookie-based session persistence
     app.config['REMEMBER_COOKIE_NAME'] = 'Steraudio'
-    app.config['REMEMBER_COOKIE_DURATION'] = 3600 * 24 * 365 # One year
+    app.config['REMEMBER_COOKIE_DURATION'] = 3600 * 24 * 365  # One year
 
     from app.main.routes import main
     app.register_blueprint(main)

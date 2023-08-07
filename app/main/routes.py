@@ -18,7 +18,8 @@ from urllib.parse import urlparse
 import os
 import time
 import requests
-from flask import Blueprint, render_template, flash, redirect, url_for, request, jsonify, send_file, send_from_directory, session, abort
+from flask import Blueprint, render_template, flash, redirect, url_for, request, jsonify, send_file, \
+    send_from_directory, session, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from app.models import User, Podcast, Episode, db, UnfinishedEpisode, UserPodcast, Discover
 from app import bcrypt
@@ -29,6 +30,7 @@ from random import choice
 
 main = Blueprint('main', __name__)
 
+
 def run_external_scripts():
     subprocess.Popen(['python', 'instance/fr.py'])
     time.sleep(1 * 60 * 60)  # Wait for 1 hour
@@ -38,6 +40,7 @@ def run_external_scripts():
     time.sleep(1 * 60 * 60)  # Wait for 1 hour
     subprocess.Popen(['python', 'instance/us.py'])
 
+
 def run_scheduler():
     while True:
         try:
@@ -46,21 +49,26 @@ def run_scheduler():
             continue
         time.sleep(24 * 60 * 60)  # Wait for 24 hours
 
+
 # Start the scheduler in the background
 scheduler_thread = threading.Thread(target=run_scheduler)
 scheduler_thread.start()
+
 
 @main.route('/')
 def index():
     return render_template('index.html')
 
+
 @main.route('/favicon.ico')
 def favicon():
     return send_from_directory(('./static/assets'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+
 @main.route('/apple-touch-icon.png')
 def apple_touch_icon():
-     return send_from_directory(('./static/assets'), 'apple-touch-icon.png', mimetype='image/png')
+    return send_from_directory(('./static/assets'), 'apple-touch-icon.png', mimetype='image/png')
+
 
 @main.route('/register', methods=['GET', 'POST'])
 def register():
@@ -76,7 +84,9 @@ def register():
         if user:
             flash('Nom d\'utilisateur déjà existant. Veuillez choisir un nom d\'utilisateur différent.', 'danger')
         elif not is_password_strong(password):
-            flash('Le mot de passe doit comporter au moins 8 caractères et contenir au moins une lettre majuscule, une lettre minuscule et un chiffre.', 'danger')
+            flash(
+                'Le mot de passe doit comporter au moins 8 caractères et contenir au moins une lettre majuscule, une lettre minuscule et un chiffre.',
+                'danger')
         else:
             hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
             new_user = User(username=username, password=hashed_password, is_2fa_enabled=False, otp_secret=False)
@@ -86,6 +96,7 @@ def register():
             return redirect(url_for('main.login'))
 
     return render_template('register.html')
+
 
 def is_password_strong(password):
     if len(password) < 8:
@@ -97,6 +108,7 @@ def is_password_strong(password):
     if not re.search(r'\d', password):
         return False
     return True
+
 
 @main.route('/verify_2fa', methods=['GET', 'POST'])
 def verify_2fa():
@@ -114,7 +126,7 @@ def verify_2fa():
             if totp.verify(totp_code):
                 login_user(user)
                 session.pop('user_id')
-                
+
                 next_url = session.get('next_url')
                 session.pop('next_url', None)
 
@@ -126,6 +138,7 @@ def verify_2fa():
                 flash('Code 2FA invalide. Veuillez réessayer.', 'danger')
 
     return render_template('verify_2fa.html')
+
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
@@ -148,7 +161,7 @@ def login():
                 return redirect(url_for('main.verify_2fa'))
             else:
                 login_user(user)
-                
+
                 next_url = session.get('next_url')
                 session.pop('next_url', None)
 
@@ -156,7 +169,7 @@ def login():
                     return redirect(next_url)
                 else:
                     return redirect(url_for('main.index'))
-                
+
         else:
             flash('Connexion échouée. Veuillez vérifier votre nom d\'utilisateur et votre mot de passe.', 'danger')
     else:
@@ -165,6 +178,7 @@ def login():
             session['next_url'] = next_url
 
     return render_template('login.html')
+
 
 @main.route('/settings', methods=['GET', 'POST'])
 @login_required
@@ -196,7 +210,9 @@ def settings():
                 return redirect(url_for('main.settings'))
 
             if not is_password_strong(new_password):
-                flash('Le mot de passe doit contenir au moins 8 caractères et inclure une combinaison de lettres, de chiffres et de caractères spéciaux.', 'danger')
+                flash(
+                    'Le mot de passe doit contenir au moins 8 caractères et inclure une combinaison de lettres, de chiffres et de caractères spéciaux.',
+                    'danger')
                 return redirect(url_for('main.settings'))
 
             current_user.password = bcrypt.generate_password_hash(new_password).decode('utf-8')
@@ -232,7 +248,7 @@ def settings():
 
                 flash('L\'authentification à deux facteurs (2FA) a été désactivée !', 'success')
                 return redirect(url_for('main.settings'))
-            
+
         if 'totp_code' in request.form:
             if session['2fa_enabled']:
                 # 2FA est déjà activé
@@ -270,9 +286,9 @@ def settings():
             logout_user()
             flash('Votre compte a été supprimé !', 'success')
             return redirect(url_for('main.index'))
-        
+
         if 'delete_podcasts' in request.form:
-             # Delete podcasts linked to user (id)
+            # Delete podcasts linked to user (id)
             podcasts = UserPodcast.query.filter_by(user_id=current_user.id).all()
             for podcast in podcasts:
                 # Delete the podcast itself
@@ -284,11 +300,13 @@ def settings():
 
     return render_template('settings.html')
 
+
 @main.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
+
 
 def is_url_and_rss_feed(string):
     result = urlparse(string)
@@ -301,6 +319,7 @@ def is_url_and_rss_feed(string):
     except:
         return False
 
+
 @main.route('/podcasts', methods=['GET', 'POST'])
 @login_required
 def podcasts():
@@ -310,7 +329,7 @@ def podcasts():
         else:
             title = False
         rss_feed = request.form.get('rss_feed')
-        
+
         if is_url_and_rss_feed(rss_feed):
             add_podcast_to_db(rss_feed)
         else:
@@ -319,6 +338,7 @@ def podcasts():
 
     podcasts = current_user.podcasts
     return render_template('podcasts.html', podcasts=podcasts)
+
 
 def add_podcast_to_db(rss_feed):
     # Query the podcast URL to retrieve the keywords and image
@@ -355,7 +375,7 @@ def add_podcast_to_db(rss_feed):
                 explicit = False
         else:
             explicit = False
-        
+
         owner_elem = root.find('.//itunes:owner', itunes_ns)
 
         if owner_elem is not None:
@@ -390,7 +410,7 @@ def add_podcast_to_db(rss_feed):
                     print(e)
                     flash('URL du podcast invalide !', 'error')
                     return redirect(url_for('main.podcasts'))
-                
+
             existing_podcast_relationships = UserPodcast.query.filter_by(user_id=current_user.id).all()
 
             if existing_podcast_relationships:
@@ -467,6 +487,7 @@ def delete_podcast(podcast_id):
 
     return redirect(url_for('main.podcasts'))
 
+
 @main.route('/podcasts/<int:podcast_id>')
 @login_required
 def view_podcast(podcast_id):
@@ -477,6 +498,7 @@ def view_podcast(podcast_id):
         return render_template('index.html')
 
     return render_template('podcast.html', podcast=podcast)
+
 
 @main.route('/api/resize/<path:image_url>/<int:image_size>')
 def resize_image(image_url, image_size):
@@ -500,6 +522,7 @@ def resize_image(image_url, image_size):
         # Handle any errors that occur during image resizing or retrieval
         flash('Erreur lors du redimensionnement de l\'image.', 'error')
         return redirect(url_for('main.index'))
+
 
 @main.route('/api/episodes/<int:podcast_id>', methods=['GET'])
 @login_required
@@ -595,12 +618,12 @@ def api_episodes(podcast_id):
         else:
             # If the episode exists, update it if any of its elements don't match
             if (
-                existing_episode.subtitle != subtitle or
-                existing_episode.audio_url != audio_url or
-                existing_episode.duration != duration or
-                existing_episode.pubdate != pubdate or
-                existing_episode.episode != episode_number or
-                existing_episode.season != season_number
+                    existing_episode.subtitle != subtitle or
+                    existing_episode.audio_url != audio_url or
+                    existing_episode.duration != duration or
+                    existing_episode.pubdate != pubdate or
+                    existing_episode.episode != episode_number or
+                    existing_episode.season != season_number
             ):
                 existing_episode.subtitle = subtitle
                 existing_episode.audio_url = audio_url
@@ -707,13 +730,13 @@ def api_episodes(podcast_id):
             explicit = False
 
         if (
-            podcast.keywords != keywords or
-            podcast.description != description or
-            podcast.author != author or
-            podcast.image != image_href or
-            podcast.owner != owner or
-            podcast.explicit != explicit or
-            podcast.language != language
+                podcast.keywords != keywords or
+                podcast.description != description or
+                podcast.author != author or
+                podcast.image != image_href or
+                podcast.owner != owner or
+                podcast.explicit != explicit or
+                podcast.language != language
         ):
             podcast.keywords = keywords
             podcast.description = description
@@ -735,9 +758,9 @@ def api_episodes(podcast_id):
 
     # Prepare the JSON response
     episodes = podcast.episodes
-    
+
     response_data = {
-        'error' : str(error),
+        'error': str(error),
         'title': podcast.title,
         'description': podcast.description,
         'author': podcast.author,
@@ -764,6 +787,7 @@ def api_episodes(podcast_id):
         return jsonify(response_data)
     except:
         return "error"
+
 
 @main.route('/export')
 @login_required
@@ -797,7 +821,9 @@ def export_opml():
     # Send the file as an attachment
     return send_file(opml_data, mimetype='text/xml', as_attachment=True, download_name=attachment_filename)
 
+
 ALLOWED_EXTENSIONS = {'xml', 'opml'}
+
 
 @main.route('/import', methods=['POST'])
 def import_opml():
@@ -840,8 +866,10 @@ def import_opml():
     else:
         return {'error': 'No file provided or invalid file format.'}, 400
 
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @main.route('/add_unfinished_episode', methods=['POST'])
 @login_required
@@ -859,6 +887,7 @@ def add_unfinished_episode():
     response = jsonify({'message': 'Unfinished episode added'})
     return response
 
+
 @main.route('/remove_unfinished_episode', methods=['POST'])
 @login_required
 def remove_unfinished_episode():
@@ -875,12 +904,13 @@ def remove_unfinished_episode():
     response = jsonify({'message': 'Unfinished episode removed'})
     return response
 
+
 @main.route('/discover', methods=['GET'])
 @login_required
 def discover():
     browser_language = request.headers.get('Accept-Language')
     primary_language = browser_language.split(',')[0].split(';')[0].split('-')[0]
-    
+
     languages = ['fr', 'us', 'gb', 'ca', 'en']
 
     if primary_language.lower() in languages:
@@ -1033,8 +1063,9 @@ def discover():
                 categories[translated_category].append(podcast)
                 if len(categories[translated_category]) == category_limit:
                     break
-                    
+
     return render_template('discover.html', podcasts=podcasts, categories=categories)
+
 
 def normalize_text(text):
     """
@@ -1042,6 +1073,7 @@ def normalize_text(text):
     """
     normalized_text = unicodedata.normalize('NFD', text).encode('ascii', 'ignore').decode('utf-8')
     return normalized_text.lower()
+
 
 @main.route('/api/discover', methods=['GET'])
 @login_required
@@ -1051,7 +1083,7 @@ def discover_api():
 
     # Normalize the search query
     normalized_query = normalize_text(search_query) if search_query else ""
-    
+
     # Filter podcasts based on the search query
     if normalized_query:
         podcasts = [
