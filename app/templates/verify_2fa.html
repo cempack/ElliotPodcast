@@ -1,0 +1,18 @@
+<!-- app/templates/verify_2fa.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/verify_2fa.css') }}"> 
+
+<h1>Vérification du code OTP</h1>
+    <p>Veuillez entrer le code OTP généré par votre application d'authentification.</p>
+    <form method="post" action="{{ url_for('main.verify_2fa') }}">
+        <div>
+            <label for="otp_code">Code OTP</label>
+            <input type="text" id="otp_code" name="totp_code" required>
+        </div>
+        <button type="submit">Vérifier OTP</button>
+    </form>
+{% endblock %}

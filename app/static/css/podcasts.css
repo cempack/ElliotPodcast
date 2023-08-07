@@ -1,0 +1,231 @@
+/* Global Styles */
+
+body {
+    background-color: #161C20;
+    color: #ffffff;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.content>h2 {
+    text-align: center;
+}
+
+
+/* Heading */
+
+h2 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #18B777;
+}
+
+
+/* Form */
+
+form {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+form input[type="text"] {
+    width: 500px;
+    outline: none;
+    border: 2px solid #ccc;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+input[type="text"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #555555;
+    background-color: #ffffff;
+    background-clip: padding-box;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+input[type="submit"],
+button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.15s ease-in-out;
+    background-color: #18B777;
+    color: #ffffff;
+}
+
+input[type="submit"]:hover,
+button:hover {
+    background-color: #157B55;
+}
+
+button {
+    border-bottom-right-radius: 50px;
+    height: 165px;
+    border-top-right-radius: 50px;
+}
+
+.podcasts {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Podcasts List */
+
+.podcast {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    width: 800px;
+}
+
+.podcast_infos>h3 {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+.podcast_infos>h3 a {
+    color: #18B777;
+    text-decoration: none;
+    transition: color 0.15s ease-in-out;
+}
+
+.podcast_infos>h3 a:hover {
+    color: #157B55;
+}
+
+.podcast>h3 {
+    color: #18B777;
+    text-decoration: none;
+    transition: color 0.15s ease-in-out;
+}
+
+.podcast_infos>p {
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.img_container>img {
+    width: 165px;
+    height: 165px;
+    border-radius: 10px;
+    margin-right: 5px;
+}
+
+.no_podcast {
+    display: flex;
+    flex-direction: column;
+}
+
+.podcast>hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-top: 1px solid #cccccc;
+}
+
+
+/* Custom Styles */
+
+.container {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"] {
+    border-radius: 4px;
+}
+
+input[type="submit"] {
+    border-radius: 4px;
+}
+
+input[type="submit"]:focus {
+    outline: none;
+}
+
+@media screen and (max-width: 825px) {
+    .podcast {
+        flex-wrap: wrap;
+        width: 95%;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(315deg, #161C20, #3a3d3f) center no-repeat;
+        border-radius: 60px;
+        justify-content: center;
+        align-items: center;
+    }
+    .no_podcast {
+        flex-wrap: wrap;
+        width: 100%;
+        margin-top: 20px;
+        background: none;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 60px;
+        justify-content: center;
+        align-items: center;
+    }
+    button {
+        border-bottom-left-radius: 50px;
+        width: 200px;
+        height: auto;
+        border-bottom-right-radius: 50px;
+        border-top-right-radius: 0px;
+        border-top-left-radius: 0px;
+    }
+    .img_container>img {
+        width: 200px;
+        height: 200px;
+        border-radius: 10px;
+        margin-right: 5px;
+        margin-top: 25px;
+    }
+    .podcast_infos {
+        width: 200px;
+        text-align: center;
+    }
+    form input[type="text"] {
+        width: 250px;
+    }
+}

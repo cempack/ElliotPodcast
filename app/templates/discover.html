@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/discover.css') }}">
+
+<h1>Découvrir des podcasts</h1>
+
+<form action="{{ url_for('main.discover_api') }}" method="GET">
+    <input type="text" name="search" placeholder="Rechercher...">
+    <input type="submit" style="display: none;" value="Rechercher">
+</form>
+
+<!-- Add the "Search Results" category -->
+    <div class="category" id="search" style="display: none;">
+        <h2 id="search-title">Résultats de la recherche :</h2>
+        <div class="podcast-list" id="search-results"></div>
+    </div>
+
+<div class="category-container">
+  <div class="scrollable-wrapper">
+    {% for category, podcasts in categories.items() %}
+      <div class="category">
+        <h2>{{ category }}</h2>
+        <div class="podcast-list">
+          <!-- <button class="scroll-arrow left">&larr;</button> -->
+          {% for podcast in podcasts %}
+            <div class="podcast">
+              <h3>{{ podcast.title }}</h3>
+              <div class="podcast-info">
+                <p><strong>Auteur :</strong> {{ podcast.author }}</p>
+                <button class="extend-button">En savoir plus</button>
+                <form method="POST" action="{{ url_for('main.podcasts') }}">
+                    <input value="{{ podcast.rss_feed }}" type="hidden" style="display: none;" id="rss_feed" name="rss_feed" required>
+                    <button type="submit" class="add-button">S'abonner au podcast</button>
+                </form>
+                <div class="extended-info">
+                  <p><strong>Description :</strong> {{ podcast.description }}</p>
+                  <p><strong>Categories :</strong> {{ podcast.keywords }}</p>
+                </div>
+              </div>
+              {% if podcast.image %}
+                <img src="{{ podcast.image }}" alt="Image du podcast {{ podcast.title }}">
+              {% endif %}
+            </div>
+          {% endfor %}
+          <!-- <button class="scroll-arrow right">&rarr;</button> -->
+        </div>
+      </div>
+    {% endfor %}
+</div>
+</div>
+
+<script>
+    const main_podcast = "{{ url_for('main.podcasts') }}";
+</script>
+<script src="{{ url_for('static', filename='js/discover.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Spline+Sans:wght@500&display=swap');
+* {
+    box-sizing: border-box;
+    font-family: 'Spline Sans', sans-serif;
+}
+
+body {
+    font-family: 'Spline Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(315deg, #161C20, #3a3d3f) center no-repeat;
+    background-size: cover;
+    color: #ffffff;
+}
+
+.page-container {
+    position: relative;
+    min-height: 100vh;
+}
+
+nav {
+    background-color: #18B777;
+    color: #fff;
+    padding: 10px;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.content {
+    margin: 20px;
+    padding: 0 20px;
+    padding-bottom: 50px;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    width: 100%;
+    background-color: #18B777;
+    color: #fff;
+    font-family: 'Spline Sans', sans-serif;
+    font-size: 14px;
+    padding: 2px;
+    position: absolute;
+    bottom: -30px;
+}
+
+footer>p {
+    color: #fff;
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 0.5px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+.alert {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #18B777;
+    border-radius: 4px;
+    background-color: #d4efe5;
+    color: #18B777;
+}
+
+.alert-success {
+    background-color: #a1dfc9;
+    border-color: #56a78e;
+    color: #157B55;
+}
+
+.alert-danger {
+    background-color: #f4c6c6;
+    border-color: #d46d6d;
+    color: #B62C2C;
+}
+
+.episode {
+    background-color: #18B777;
+    color: #1d1d1d;
+    border: none;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.episode:hover {
+    background-color: #145D44;
+}
