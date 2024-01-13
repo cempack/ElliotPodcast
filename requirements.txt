@@ -1,0 +1,7 @@
+feedparser
+qrcode
+pyotp
+flask_sqlalchemy
+flask_login
+flask_bcrypt
+flask
