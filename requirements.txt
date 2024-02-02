@@ -5,3 +5,4 @@ flask_sqlalchemy
 flask_login
 flask_bcrypt
 flask
+python-dateutil
