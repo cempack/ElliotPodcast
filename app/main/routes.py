@@ -16,6 +16,7 @@ from datetime import datetime
 import re
 from urllib.parse import urlparse
 import os
+import sys
 import time
 import requests
 from flask import Blueprint, render_template, flash, redirect, url_for, request, jsonify, send_file, \
@@ -30,21 +31,29 @@ from random import choice
 
 main = Blueprint('main', __name__)
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../instance')))
+from fetch import update_podcasts
 
-def run_external_scripts():
-    subprocess.Popen(['python', 'instance/fr.py'])
-    time.sleep(1 * 60 * 60)  # Wait for 1 hour
-    subprocess.Popen(['python', 'instance/gb.py'])
-    time.sleep(1 * 60 * 60)  # Wait for 1 hour
-    subprocess.Popen(['python', 'instance/ca.py'])
-    time.sleep(1 * 60 * 60)  # Wait for 1 hour
-    subprocess.Popen(['python', 'instance/us.py'])
+def run_update_for_language(language_code):
+    update_podcasts(language_code)
+
+def run_all_updates():
+    languages = ['fr', 'gb', 'ca', 'us']
+    processes = []
+
+    for lang in languages:
+        p = multiprocessing.Process(target=run_update_for_language, args=(lang,))
+        processes.append(p)
+        p.start()
+
+    for p in processes:
+        p.join()
 
 
 def run_scheduler():
     while True:
         try:
-            run_external_scripts()
+            run_all_updates()
         except:
             continue
         time.sleep(24 * 60 * 60)  # Wait for 24 hours
